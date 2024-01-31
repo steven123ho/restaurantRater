@@ -25,7 +25,7 @@ public class restaurantDataSource {
     }
 
     //inserts a new contact to the database
-    public boolean insertContact (restaurant r) {
+    public boolean insertRestaurant (restaurant r) {
         boolean didSucceed = false;
         try {
             ContentValues initialValues = new ContentValues();
@@ -36,7 +36,7 @@ public class restaurantDataSource {
             initialValues.put("state", r.getState());
             initialValues.put("zipcode", r.getZipCode());
 
-            didSucceed = database.insert("contact", null, initialValues) > 0;
+            didSucceed = database.insert("restaurant", null, initialValues) > 0;
         } catch (Exception e){
             // Do nothing, will return false if there is an exemption
         }
@@ -45,7 +45,7 @@ public class restaurantDataSource {
 
 
     // updates an existing contact from the database
-    public boolean updateContact (restaurant r) {
+    public boolean updateRestaurant (restaurant r) {
         boolean didSucceed = false;
         try {
             Long rowId = (long) r.getRestaurantID();
@@ -66,7 +66,7 @@ public class restaurantDataSource {
         return didSucceed;
     }
 
-    public int getLastContactID() {
+    public int getLastID() {
 
         int lastId;
         try {

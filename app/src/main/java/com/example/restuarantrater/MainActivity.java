@@ -19,9 +19,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        initTextChangedEvents();
+        initSaveButton();
+
     }
-
-
 
     private void initTextChangedEvents() {
 
@@ -131,13 +132,13 @@ public class MainActivity extends AppCompatActivity {
                     ds.open();
 
                     if(currentRestaurant.getRestaurantID() == -1) {
-                        wasSuccessful = ds.insertContact(currentRestaurant);
+                        wasSuccessful = ds.insertRestaurant(currentRestaurant);
                         if (wasSuccessful) {
-                            int newId = ds.getLastContactID();
+                            int newId = ds.getLastID();
                             currentRestaurant.setRestaurantID(newId);
                         }
                     } else {
-                        wasSuccessful = ds.updateContact(currentRestaurant);
+                        wasSuccessful = ds.updateRestaurant(currentRestaurant);
                     }
                     ds.close();
                 } catch (Exception e) {
