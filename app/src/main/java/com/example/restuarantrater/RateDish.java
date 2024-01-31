@@ -2,7 +2,10 @@ package com.example.restuarantrater;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
@@ -71,7 +74,9 @@ public class RateDish extends AppCompatActivity {
             }
         });
 
-        currentDish.setRestaurantID(0);
+        final SharedPreferences mSharedPreference= getSharedPreferences("restaurantID",MODE_PRIVATE);
+        int value = Integer.parseInt((mSharedPreference.getString("restaurantID", "-1")));
+        currentDish.setRestaurantID(value);
     }
 
     private void initSubmitButton () {
@@ -92,13 +97,23 @@ public class RateDish extends AppCompatActivity {
                         results.setText("Your meal has been added");
                         name.setText("");
                         type.setText("");
-
-                        //currentDish.setRestaurantID(newId);
                     }
                     dds.close();
                 } catch (Exception e) {
                     wasSuccessful = false;
                 }
+            }
+        });
+    }
+
+    private void initBack() {
+        TextView home = findViewById(R.id.homeBtn);
+        home.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(RateDish.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //clears the stack trace
+                startActivity(intent);
             }
         });
     }

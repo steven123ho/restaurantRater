@@ -13,7 +13,7 @@ public class dishDBHelper extends SQLiteOpenHelper{
     private static final String Create_Table_DISH =
             "create table dish (dishID integer primary key autoincrement, " +
                     "name text not null, type text, " +
-                    "rating text, restaurantID int);";
+                    "rating text, restaurantID int foreign key);";
 
     public dishDBHelper(Context context) {
         super(context, DATABASE_DISH, null, DATABASE_VERSION);

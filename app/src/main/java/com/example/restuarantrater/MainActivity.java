@@ -3,6 +3,7 @@ package com.example.restuarantrater;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -163,6 +164,7 @@ public class MainActivity extends AppCompatActivity {
                 Intent intent = new Intent(MainActivity.this, RateDish.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //clears the stack trace
                 startActivity(intent);
+                savedID();
             }
         });
     }
@@ -186,6 +188,15 @@ public class MainActivity extends AppCompatActivity {
         EditText zipCodeInput = findViewById(R.id.zipInput);
         imm.hideSoftInputFromWindow(zipCodeInput.getWindowToken(), 0);
     }
+
+    //Used to store data of last Restaurant Id
+    private void savedID () {
+        SharedPreferences sp = getSharedPreferences("restaurantID", MODE_PRIVATE);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString("restaurantID", String.valueOf(currentRestaurant.getRestaurantID()));
+        editor.apply();
+    }
+
 
 
 }
