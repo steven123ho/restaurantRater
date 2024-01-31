@@ -10,21 +10,21 @@ public class RestaurantDBHelper extends SQLiteOpenHelper {
     private static final String DATABASE_RESTAURANTS = "myrestaurants.db";
     private static final int DATABASE_VERSION = 1;
 
-
     //Database creation sql statement
-    private static final String Create_Table_Contact =
+    private static final String Create_Table_Restaurant =
             "create table restaurant (restaurantId integer primary key autoincrement, " +
                     "name text not null, street text, " +
-                    "city text, state text, zipcode text);";
+                    "city text, restaurantID int);";
+
+
 
     public RestaurantDBHelper(Context context) {
         super(context, DATABASE_RESTAURANTS, null, DATABASE_VERSION);
     }
 
+
     @Override
-    public void onCreate (SQLiteDatabase db) {
-        db.execSQL(Create_Table_Contact);
-    }
+    public void onCreate (SQLiteDatabase db) {db.execSQL(Create_Table_Restaurant);}
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {

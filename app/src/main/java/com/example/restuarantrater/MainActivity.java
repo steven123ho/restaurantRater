@@ -2,6 +2,7 @@ package com.example.restuarantrater;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -9,6 +10,7 @@ import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -19,9 +21,10 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         initTextChangedEvents();
         initSaveButton();
-
+        initChangeScreen();
     }
 
     private void initTextChangedEvents() {
@@ -121,6 +124,7 @@ public class MainActivity extends AppCompatActivity {
     private void initSaveButton () {
 
         Button saveButton = findViewById(R.id.saveBtn);
+        TextView results = findViewById(R.id.resultsLabel);
         saveButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,22 +132,37 @@ public class MainActivity extends AppCompatActivity {
                 hideKeyboard();
                 restaurantDataSource ds = new restaurantDataSource(MainActivity.this);
                 try {
-
                     ds.open();
-
                     if(currentRestaurant.getRestaurantID() == -1) {
                         wasSuccessful = ds.insertRestaurant(currentRestaurant);
                         if (wasSuccessful) {
                             int newId = ds.getLastID();
                             currentRestaurant.setRestaurantID(newId);
+                            String added = "Restaurant Added";
+                            results.setText(added);
+
                         }
                     } else {
                         wasSuccessful = ds.updateRestaurant(currentRestaurant);
+                        String updated = "Restaurant Updated";
+                        results.setText(updated);
                     }
                     ds.close();
                 } catch (Exception e) {
                     wasSuccessful = false;
                 }
+            }
+        });
+    }
+
+    private void initChangeScreen() {
+        Button addMealBtn = findViewById(R.id.addMealBtn);
+        addMealBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, RateDish.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //clears the stack trace
+                startActivity(intent);
             }
         });
     }

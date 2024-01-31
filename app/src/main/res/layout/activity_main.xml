@@ -139,4 +139,16 @@
         app:layout_constraintTop_toBottomOf="@+id/cityInput"
         app:layout_constraintVertical_bias="0.215" />
 
+    <TextView
+        android:id="@+id/resultLabel"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/addMealBtn"
+        app:layout_constraintVertical_bias="0.185" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
