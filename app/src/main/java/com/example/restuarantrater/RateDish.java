@@ -18,15 +18,19 @@ import java.nio.file.WatchEvent;
 
 public class RateDish extends AppCompatActivity {
 
-    private dish currentDish = new dish();
+    private dish currentDish;
+
+    private int restaurantID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate_dish);
-
+        getRestaurant();
+        currentDish = new dish();
         initTextChangedEvents();
         initSubmitButton();
+        initBack();
     }
 
 
@@ -74,9 +78,8 @@ public class RateDish extends AppCompatActivity {
             }
         });
 
-        final SharedPreferences mSharedPreference= getSharedPreferences("restaurantID",MODE_PRIVATE);
-        int value = Integer.parseInt((mSharedPreference.getString("restaurantID", "-1")));
-        currentDish.setRestaurantID(value);
+        currentDish.setRestaurantID(restaurantID);
+
     }
 
     private void initSubmitButton () {
@@ -117,5 +120,13 @@ public class RateDish extends AppCompatActivity {
             }
         });
     }
+
+    private void getRestaurant(){
+            Intent intent = getIntent();
+            if (intent != null) {
+                restaurantID = intent.getIntExtra("currentRestaurant", 0);}
+    }
+
+
 
 }

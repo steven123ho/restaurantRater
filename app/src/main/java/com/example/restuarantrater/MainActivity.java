@@ -162,9 +162,10 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, RateDish.class);
+                intent.putExtra("currentRestaurant",currentRestaurant.getRestaurantID());
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //clears the stack trace
                 startActivity(intent);
-                savedID();
+
             }
         });
     }
