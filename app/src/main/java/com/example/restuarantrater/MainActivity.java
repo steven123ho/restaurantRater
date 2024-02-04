@@ -1,7 +1,6 @@
 package com.example.restuarantrater;
 
 import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,6 +26,41 @@ public class MainActivity extends AppCompatActivity {
         initSaveButton();
         initChangeScreen();
     }
+
+    private void initSaveButton () {
+
+        Button saveButton = findViewById(R.id.saveBtn);
+        TextView results = findViewById(R.id.resultsLabel);
+        saveButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean wasSuccessful;
+                hideKeyboard();
+                restaurantDataSource ds = new restaurantDataSource(MainActivity.this);
+                try {
+                    ds.open();
+                    if(currentRestaurant.getRestaurantID() == -1) {
+                        wasSuccessful = ds.insertRestaurant(currentRestaurant);
+                        if (wasSuccessful) {
+                            int newId = ds.getLastID();
+                            currentRestaurant.setRestaurantID(newId);
+                            String added = "Restaurant Added";
+                            results.setText(added);
+
+                        }
+                    } else {
+                        wasSuccessful = ds.updateRestaurant(currentRestaurant);
+                        String updated = "Restaurant Updated";
+                        results.setText(updated);
+                    }
+                    ds.close();
+                } catch (Exception e) {
+                    wasSuccessful = false;
+                }
+            }
+        });
+    }
+
 
     private void initTextChangedEvents() {
 
@@ -122,40 +156,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private void initSaveButton () {
-
-        Button saveButton = findViewById(R.id.saveBtn);
-        TextView results = findViewById(R.id.resultsLabel);
-        saveButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean wasSuccessful;
-                hideKeyboard();
-                restaurantDataSource ds = new restaurantDataSource(MainActivity.this);
-                try {
-                    ds.open();
-                    if(currentRestaurant.getRestaurantID() == -1) {
-                        wasSuccessful = ds.insertRestaurant(currentRestaurant);
-                        if (wasSuccessful) {
-                            int newId = ds.getLastID();
-                            currentRestaurant.setRestaurantID(newId);
-                            String added = "Restaurant Added";
-                            results.setText(added);
-
-                        }
-                    } else {
-                        wasSuccessful = ds.updateRestaurant(currentRestaurant);
-                        String updated = "Restaurant Updated";
-                        results.setText(updated);
-                    }
-                    ds.close();
-                } catch (Exception e) {
-                    wasSuccessful = false;
-                }
-            }
-        });
-    }
-
     private void initChangeScreen() {
         Button addMealBtn = findViewById(R.id.addMealBtn);
         addMealBtn.setOnClickListener(new View.OnClickListener() {
@@ -189,15 +189,5 @@ public class MainActivity extends AppCompatActivity {
         EditText zipCodeInput = findViewById(R.id.zipInput);
         imm.hideSoftInputFromWindow(zipCodeInput.getWindowToken(), 0);
     }
-
-    //Used to store data of last Restaurant Id
-    private void savedID () {
-        SharedPreferences sp = getSharedPreferences("restaurantID", MODE_PRIVATE);
-        SharedPreferences.Editor editor = sp.edit();
-        editor.putString("restaurantID", String.valueOf(currentRestaurant.getRestaurantID()));
-        editor.apply();
-    }
-
-
 
 }

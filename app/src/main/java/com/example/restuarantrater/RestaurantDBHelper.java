@@ -14,9 +14,13 @@ public class RestaurantDBHelper extends SQLiteOpenHelper {
     private static final String Create_Table_Restaurant =
             "create table restaurant (restaurantId integer primary key autoincrement, " +
                     "name text not null, street text, " +
-                    "city text, restaurantID int);";
+                    "city text, state text, zipcode text);";
 
-
+    private static final String Create_Table_DISH =
+            "create table dish (dishID integer primary key autoincrement, " +
+                    "name text not null, type text, " +
+                    "rating text, restaurantID int, " +
+                    "foreign key (restaurantID) references restaurant(restaurantId));";
 
     public RestaurantDBHelper(Context context) {
         super(context, DATABASE_RESTAURANTS, null, DATABASE_VERSION);
@@ -24,13 +28,19 @@ public class RestaurantDBHelper extends SQLiteOpenHelper {
 
 
     @Override
-    public void onCreate (SQLiteDatabase db) {db.execSQL(Create_Table_Restaurant);}
+    public void onCreate (SQLiteDatabase db) {
+        db.execSQL(Create_Table_Restaurant);
+        db.execSQL(Create_Table_DISH);
+    }
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         Log.w(RestaurantDBHelper.class.getName(), "upgrading database from version " + oldVersion + " to " + newVersion
                 + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS restaurant");
+        db.execSQL("DROP TABLE IF EXISTS dish");
+
+
         onCreate(db);
     }
 }

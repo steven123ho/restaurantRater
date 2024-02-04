@@ -44,6 +44,25 @@ public class restaurantDataSource {
     }
 
 
+    public boolean insertDish (dish d) {
+        boolean didSucceed = false;
+        try {
+            ContentValues initialValues = new ContentValues();
+
+            initialValues.put("name", d.getName());
+            initialValues.put("type", d.getType());
+            initialValues.put("rating", d.getRating());
+            initialValues.put("restaurantID", d.getRestaurantID());
+
+            didSucceed = database.insert("dish", null, initialValues) > 0;
+        } catch (Exception e){
+            // Do nothing, will return false if there is an exemption
+        }
+        return didSucceed;
+    }
+
+
+
     // updates an existing contact from the database
     public boolean updateRestaurant (restaurant r) {
         boolean didSucceed = false;

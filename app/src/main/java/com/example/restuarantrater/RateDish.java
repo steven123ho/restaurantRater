@@ -19,18 +19,44 @@ import java.nio.file.WatchEvent;
 public class RateDish extends AppCompatActivity {
 
     private dish currentDish;
-
     private int restaurantID;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_rate_dish);
-        getRestaurant();
         currentDish = new dish();
         initTextChangedEvents();
         initSubmitButton();
         initBack();
+    }
+
+    private void initSubmitButton () {
+
+        Button submitButton = findViewById(R.id.submitBtn);
+        TextView results = findViewById(R.id.resultsLabel);
+        EditText type = findViewById(R.id.dishTypeInput);
+        EditText name = findViewById(R.id.dishNameInput);
+        submitButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean wasSuccessful;
+                restaurantDataSource ds = new restaurantDataSource(RateDish.this);
+                try {
+                    ds.open();
+                    if(currentDish.getDishID() == -1) {
+                        currentDish.setRestaurantID(getRestaurant());
+                        wasSuccessful = ds.insertDish(currentDish);
+                        results.setText("Your meal has been added");
+                        name.setText("");
+                        type.setText("");
+                    }
+                    ds.close();
+                } catch (Exception e) {
+                    wasSuccessful = false;
+                }
+            }
+        });
     }
 
 
@@ -82,33 +108,6 @@ public class RateDish extends AppCompatActivity {
 
     }
 
-    private void initSubmitButton () {
-
-        Button submitButton = findViewById(R.id.submitBtn);
-        TextView results = findViewById(R.id.resultsLabel);
-        EditText type = findViewById(R.id.dishTypeInput);
-        EditText name = findViewById(R.id.dishNameInput);
-        submitButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                boolean wasSuccessful;
-                dishDataSource dds = new dishDataSource(RateDish.this);
-                try {
-                    dds.open();
-                    if(currentDish.getDishID() == -1) {
-                        wasSuccessful = dds.insertDish(currentDish);
-                        results.setText("Your meal has been added");
-                        name.setText("");
-                        type.setText("");
-                    }
-                    dds.close();
-                } catch (Exception e) {
-                    wasSuccessful = false;
-                }
-            }
-        });
-    }
-
     private void initBack() {
         TextView home = findViewById(R.id.homeBtn);
         home.setOnClickListener(new View.OnClickListener() {
@@ -121,10 +120,12 @@ public class RateDish extends AppCompatActivity {
         });
     }
 
-    private void getRestaurant(){
-            Intent intent = getIntent();
-            if (intent != null) {
-                restaurantID = intent.getIntExtra("currentRestaurant", 0);}
+    private int getRestaurant(){
+        Intent intent = getIntent();
+        if (intent != null) {
+                restaurantID = intent.getIntExtra("currentRestaurant", 0);
+        }
+             return restaurantID;
     }
 
 
