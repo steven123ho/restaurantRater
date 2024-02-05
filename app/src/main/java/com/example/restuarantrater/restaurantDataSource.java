@@ -6,11 +6,15 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Calendar;
 
 public class restaurantDataSource {
 
     private SQLiteDatabase database;
     private RestaurantDBHelper dbHelper;
+    private Context parentContext;
+
 
     public restaurantDataSource (Context context) {
         dbHelper = new RestaurantDBHelper(context);
@@ -62,7 +66,6 @@ public class restaurantDataSource {
     }
 
 
-
     // updates an existing contact from the database
     public boolean updateRestaurant (restaurant r) {
         boolean didSucceed = false;
@@ -101,5 +104,58 @@ public class restaurantDataSource {
         return lastId;
     }
 
+
+    public ArrayList<dish> getDishes() {
+        ArrayList<dish> dishes = new ArrayList<dish>();
+
+        try {
+            String query = "Select * FROM dish";
+            Cursor cursor = database.rawQuery(query, null);
+
+            dish newDish;
+            cursor.moveToFirst();
+            while (!cursor.isAfterLast()) {
+                newDish = new dish();
+                newDish.setDishID(cursor.getInt(0));
+                newDish.setName(cursor.getString(1));
+                newDish.setType(cursor.getString(2));
+                newDish.setRating(cursor.getString(3));
+                dishes.add(newDish);
+                cursor.moveToNext();
+            }
+            cursor.close();
+        } catch (Exception e) {
+            dishes = new ArrayList<dish>();
+        }
+        return  dishes;
+    }
+
+
+    public dish getSpecificContact(int dishID) {
+        dish dish = new dish();
+        String query = "Select * FROM dish WHERE dishId =" + dishID;
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            dish.setDishID(cursor.getInt(0));
+            dish.setName(cursor.getString(1));
+            dish.setType(cursor.getString(2));
+            dish.setRating(cursor.getString(3));
+            cursor.close();
+        }
+        return  dish;
+    }
+
+
+    //deleting contact from data source
+    public boolean deleteDish (int dishId) {
+        boolean didDelete = false;
+        try {
+            didDelete = database.delete("dish", "dishID=" + dishId, null) > 0;
+        } catch (Exception e) {
+            //Do Nothing return value that is already set to false
+        }
+        return didDelete;
+    }
 
 }

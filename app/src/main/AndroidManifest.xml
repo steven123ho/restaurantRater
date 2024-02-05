@@ -13,10 +13,13 @@
         android:theme="@style/Theme.RestuarantRater"
         tools:targetApi="31">
         <activity
+            android:name=".MainActivity"
+            android:exported="false" />
+        <activity
             android:name=".RateDish"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".dishList"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -24,6 +27,7 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
     </application>
 
 </manifest>
