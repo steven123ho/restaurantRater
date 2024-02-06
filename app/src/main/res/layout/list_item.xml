@@ -11,6 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"
         android:text="TextView"
         android:textSize="20sp"
         app:layout_constraintBottom_toTopOf="@+id/dishType"
@@ -18,14 +19,16 @@
         app:layout_constraintHorizontal_bias="0.085"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.578" />
 
     <TextView
         android:id="@+id/dishType"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
+        android:layout_marginBottom="4dp"
         android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.079"
         app:layout_constraintStart_toStartOf="parent"
@@ -35,7 +38,7 @@
         android:id="@+id/deleteBtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        android:layout_marginTop="20dp"
         android:layout_marginEnd="16dp"
         android:background="#00FFFFFF"
         android:text="Delete"
@@ -45,4 +48,18 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toEndOf="@+id/dishName"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <RatingBar
+        android:id="@+id/ratingBarList"
+        style="@android:style/Widget.Material.Light.RatingBar.Small"
+        android:layout_width="78dp"
+        android:layout_height="21dp"
+        android:background="#00DF1010"
+        android:numStars="5"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.282"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.784" />
 </androidx.constraintlayout.widget.ConstraintLayout>

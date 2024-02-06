@@ -147,6 +147,22 @@ public class restaurantDataSource {
     }
 
 
+    public dish getSpecificDish(int dishID) {
+        dish dish = new dish();
+        String query = "Select * FROM dish WHERE dishID =" + dishID;
+        Cursor cursor = database.rawQuery(query, null);
+
+        if (cursor.moveToFirst()) {
+            dish.setName(cursor.getString(1));
+            dish.setType(cursor.getString(2));
+            dish.setRating(cursor.getString(3));
+
+            cursor.close();
+        }
+        return  dish;
+    }
+
+
     //deleting contact from data source
     public boolean deleteDish (int dishId) {
         boolean didDelete = false;

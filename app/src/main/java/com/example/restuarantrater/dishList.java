@@ -35,7 +35,6 @@ public class dishList extends AppCompatActivity {
             RecyclerView dishList;
             DishAdapter dishAdapter = new DishAdapter(dishes, dishList.this);
 
-
             dishList = findViewById(R.id.rvDishes);
             RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
             dishList.setLayoutManager(layoutManager);
@@ -76,7 +75,6 @@ public class dishList extends AppCompatActivity {
 
     private void initButton() {
         Button addButton = findViewById(R.id.addBtn);
-
         addButton.setOnClickListener(new View.OnClickListener() {
             public void onClick(View view) {
                 Intent intent = new Intent(dishList.this, MainActivity.class);

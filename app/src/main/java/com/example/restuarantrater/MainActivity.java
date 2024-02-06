@@ -6,11 +6,13 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.text.format.DateFormat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 
 public class MainActivity extends AppCompatActivity {
@@ -158,6 +160,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void initChangeScreen() {
         Button addMealBtn = findViewById(R.id.addMealBtn);
+        TextView listBtn = findViewById(R.id.MealListText);
         addMealBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -168,8 +171,15 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-    }
 
+        listBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, dishList.class);
+                startActivity(intent);
+            }
+        });
+    }
 
     private void hideKeyboard () {
         InputMethodManager imm = (InputMethodManager) getSystemService(MainActivity.this.INPUT_METHOD_SERVICE);
