@@ -1,6 +1,9 @@
 package com.example.restuarantrater;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
+
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,10 +13,14 @@ import android.text.format.DateFormat;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -27,6 +34,52 @@ public class MainActivity extends AppCompatActivity {
         initTextChangedEvents();
         initSaveButton();
         initChangeScreen();
+
+        restaurantDataSource ds = new restaurantDataSource(this);
+        ArrayList<dish> dishes;
+
+        try {
+            ds.open();
+            dishes = ds.getDishes();
+            ds.close();
+            RecyclerView dishList;
+            DishAdapter dishAdapter = new DishAdapter(dishes, MainActivity.this);
+
+            dishList = findViewById(R.id.rvDishes);
+            RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
+            dishList.setLayoutManager(layoutManager);
+            dishList.setAdapter(dishAdapter);
+
+
+            // Added the ItemClickListener here for the class contact to have been initialized
+            //Book said to add it before the onCreate method
+            View.OnClickListener onItemClickListener = new View.OnClickListener() {
+                @Override
+                public void onClick (View view) {
+                    RecyclerView.ViewHolder viewHolder = (RecyclerView.ViewHolder) view.getTag();
+                    int position = viewHolder.getAdapterPosition();
+                    int dishId = dishes.get(position).getDishID();
+                    Intent intent = new Intent(MainActivity.this, RateDish.class);
+                    intent.putExtra("dishID", dishId);
+                    startActivity(intent);
+                }
+            };
+            dishAdapter.setmOnClickListener(onItemClickListener);
+
+            //Switch turns delete buttons on and off
+            //Book did not say to put here but the contactAdapter is here
+            Switch s = findViewById(R.id.switchDelete);
+            s.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                @Override
+                public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
+                    Boolean status = compoundButton.isChecked();
+                    dishAdapter.setDelete(status);
+                    dishAdapter.notifyDataSetChanged();
+                }
+            });
+        } catch (Exception e){
+            Toast.makeText(this, "Error retrieving contacts", Toast.LENGTH_LONG).show();
+        }
     }
 
     private void initSaveButton () {
@@ -46,14 +99,9 @@ public class MainActivity extends AppCompatActivity {
                         if (wasSuccessful) {
                             int newId = ds.getLastID();
                             currentRestaurant.setRestaurantID(newId);
-                            String added = "Restaurant Added";
-                            results.setText(added);
-
                         }
                     } else {
                         wasSuccessful = ds.updateRestaurant(currentRestaurant);
-                        String updated = "Restaurant Updated";
-                        results.setText(updated);
                     }
                     ds.close();
                 } catch (Exception e) {
@@ -160,7 +208,6 @@ public class MainActivity extends AppCompatActivity {
 
     private void initChangeScreen() {
         Button addMealBtn = findViewById(R.id.addMealBtn);
-        TextView listBtn = findViewById(R.id.MealListText);
         addMealBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -169,14 +216,6 @@ public class MainActivity extends AppCompatActivity {
                 intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP); //clears the stack trace
                 startActivity(intent);
 
-            }
-        });
-
-        listBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(MainActivity.this, dishList.class);
-                startActivity(intent);
             }
         });
     }
